@@ -1,0 +1,4 @@
+pandas
+scikit-learn
+streamlit
+pyarrow # Necesario si usas archivos .parquet
