@@ -405,7 +405,15 @@ def recommend_books_content_based(title, df_books, tfidf_vec, cosine_sim_mtx, fe
         st.warning(f"El libro '{title}' no se encontró en nuestra base de datos para la búsqueda de similitud. Por favor, selecciona un libro de la lista.")
         return pd.DataFrame()
 
-    sim_scores = list(enumerate(cosine_sim_mtx[idx]))
+    # #### DEBUGGING: Inspeccionar la fila de la matriz dispersa ####
+    # cosine_sim_mtx[idx] devolverá un objeto scipy.sparse.csr_matrix (una fila)
+    st.write(f"DEBUG: Número de elementos no-cero para el libro {title}: {cosine_sim_mtx[idx].nnz}")
+    # Puedes incluso ver los valores y sus índices (solo los primeros pocos si es muy grande)
+    # st.write(f"DEBUG: Valores de similitud (primeros 10): {cosine_sim_mtx[idx].data[:10]}")
+    # st.write(f"DEBUG: Índices de similitud (primeros 10): {cosine_sim_mtx[idx].indices[:10]}")
+    # #### FIN DEBUGGING ####
+
+    sim_scores = list(enumerate(cosine_sim_mtx[idx].toarray().flatten()))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
 
     recommended_indices = []
