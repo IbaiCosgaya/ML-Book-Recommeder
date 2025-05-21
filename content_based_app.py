@@ -316,19 +316,63 @@ import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import os
+import requests
+from scipy.sparse import load_npz # #### CAMBIO IMPORTANTE: Nueva importación ####
+
+# --- Configuración para la descarga del archivo grande ---
+# URL de descarga directa de tu archivo cosine_sim_matrix.npz (¡ACTUALIZADO!)
+COSINE_SIM_MATRIX_URL = "https://github.com/IbaiCosgaya/ML-Book-Recommeder/releases/download/v1.0.0-data/cosine_sim_matrix.npz" # #### CAMBIO IMPORTANTE: Nueva URL ####
+# Ruta local donde se guardará el archivo (¡ACTUALIZADO!)
+COSINE_SIM_MATRIX_PATH = 'cosine_sim_matrix.npz' # #### CAMBIO IMPORTANTE: Nueva extensión ####
+# ---------------------------------------------------------
 
 # --- Cargar datos y modelos (¡Solo se cargan una vez!) ---
 @st.cache_resource
 def load_resources():
     try:
+        # Cargar el DataFrame combinado de libros
         df_combined_books = pd.read_parquet('df_combined_books_final.parquet')
         
+        # Cargar el TF-IDF vectorizer
         with open('tfidf_vectorizer.pkl', 'rb') as f:
             tfidf_model_loaded = pickle.load(f)
         
-        with open('cosine_sim_matrix.pkl', 'rb') as f:
-            cosine_sim_matrix_loaded = pickle.load(f)
+        # --- Lógica para descargar la matriz de similitud si no existe ---
+        if not os.path.exists(COSINE_SIM_MATRIX_PATH):
+            st.warning(f"'{COSINE_SIM_MATRIX_PATH}' no encontrado. Intentando descargarlo desde GitHub Releases...")
+            try:
+                response = requests.get(COSINE_SIM_MATRIX_URL, stream=True)
+                response.raise_for_status() # Lanza un error para códigos de estado HTTP incorrectos
+
+                # Obtener el tamaño total para la barra de progreso (si está disponible)
+                total_size = int(response.headers.get('content-length', 0))
+                block_size = 1024 # 1 KB
+                
+                # Mostrar barra de progreso en Streamlit
+                progress_bar = st.progress(0)
+                downloaded = 0
+
+                with open(COSINE_SIM_MATRIX_PATH, 'wb') as f_out:
+                    for data in response.iter_content(block_size):
+                        f_out.write(data)
+                        downloaded += len(data)
+                        # Actualizar barra de progreso
+                        progress = min(int(100 * downloaded / total_size), 100)
+                        progress_bar.progress(progress)
+                
+                st.success(f"'{COSINE_SIM_MATRIX_PATH}' descargado exitosamente.")
+                progress_bar.empty() # Opcional: limpiar la barra de progreso una vez completada
+
+            except requests.exceptions.RequestException as e:
+                st.error(f"Error al descargar '{COSINE_SIM_MATRIX_PATH}': {e}. Por favor, verifica el enlace o descárgalo manualmente desde {COSINE_SIM_MATRIX_URL}")
+                st.stop() # Detiene la ejecución de Streamlit si la descarga falla
+        # ------------------------------------------------------------------
+
+        # Cargar la matriz de similitud (¡AHORA ES UN .npz Y USAMOS load_npz!)
+        # #### CAMBIO IMPORTANTE: Usamos load_npz en lugar de pickle.load ####
+        cosine_sim_matrix_loaded = load_npz(COSINE_SIM_MATRIX_PATH) 
         
+        # Procesamiento de features_df (si ya lo tienes, déjalo como está)
         features_df = df_combined_books[['title','authors','average_rating', 'genre', 'pages']].astype(str)
         features_df['title'] = features_df['title'].str.replace(' ', '').str.lower()
         features_df['authors'] = features_df['authors'].str.replace(' ', '').str.lower()
@@ -344,7 +388,7 @@ def load_resources():
         return df_combined_books, tfidf_model_loaded, cosine_sim_matrix_loaded, features_df
     
     except FileNotFoundError as e:
-        st.error(f"Error: No se encontraron los archivos de recursos necesarios. Asegúrate de que 'df_combined_books_final.parquet', 'tfidf_vectorizer.pkl' y 'cosine_sim_matrix.pkl' estén en la misma carpeta que 'content_based_app.py'.")
+        st.error(f"Error: No se encontraron los archivos de recursos necesarios. Asegúrate de que 'df_combined_books_final.parquet' y 'tfidf_vectorizer.pkl' estén en la misma carpeta. Si falta '{COSINE_SIM_MATRIX_PATH}', el intento de descarga falló.")
         st.stop()
     except Exception as e:
         st.error(f"Ocurrió un error inesperado al cargar los recursos: {e}")
