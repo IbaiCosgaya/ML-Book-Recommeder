@@ -11,6 +11,14 @@ Mediante el uso del **aprendizaje automático**, este sistema no solo propone li
 
 ---
 
+## 🚀 ¡Prueba la aplicación aquí!
+
+[![Lanzar en Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ml-book-recommeder-sekrappw3fajerywep7czvw.streamlit.app/)
+
+O haz clic directamente: [Acceder a la aplicación de recomendación de libros](https://ml-book-recommeder-sekrappw3fajerywep7czvw.streamlit.app/)
+
+---
+
 ## 🌟 Características Principales
 
 * **Recomendaciones Personalizadas:** Obtén sugerencias de libros hechas a tu medida.
@@ -68,13 +76,13 @@ Este proyecto está diseñado para ejecutarse en un entorno **Jupyter Notebook**
 * **Jupyter Notebook:** Para la interfaz interactiva y el desarrollo.
 * **ipywidgets:** Para elementos interactivos en el notebook.
 * **HTML/CSS:** Para una presentación atractiva de las recomendaciones.
+* **Streamlit:** Para el despliegue de la aplicación web interactiva.
 
 ---
 
 ## 📈 Futuras Mejoras
 
 * Implementación de características de contenido más sofisticadas (ej., procesamiento de lenguaje natural en descripciones de libros).
-* Despliegue como una aplicación web interactiva (Flask/Django).
 * Exploración de otros algoritmos híbridos más complejos.
 
 ---
@@ -84,4 +92,3 @@ Este proyecto está diseñado para ejecutarse en un entorno **Jupyter Notebook**
 [IbaiCosgaya] - [ibaicosgayaprieto@gmail.com]
 
 ---
-
