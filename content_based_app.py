@@ -200,33 +200,98 @@
 #                         except (ValueError, TypeError):
 #                             clean_pages_str = str(temp_pages).strip()
 
-#                         # Manejo de imagen URL
-#                         raw_image_url = book.get('image_url')
-#                         if pd.notna(raw_image_url) and isinstance(raw_image_url, str) and raw_image_url.strip():
-#                             st.image(
-#                                 raw_image_url.strip(),
-#                                 caption=clean_title,
-#                                 width=150,
-#                                 use_column_width=False
-#                             )
-#                         else:
-#                             # Si no hay imagen, mostrar un placeholder
-#                             st.markdown(
-#                                 """
-#                                 <div style="width:100px;height:150px;background-color:#f0f0f0;
-#                                 display:flex;align-items:center;justify-content:center;
-#                                 margin:0 auto;text-align:center;border:1px solid #ccc;font-size:10px;padding:5px;">
-#                                 No hay<br>portada
-#                                 </div>
-#                                 """,
-#                                 unsafe_allow_html=True
-#                             )
-                        
-#                         # Mostrar detalles del libro
-#                         st.markdown(f"**{clean_title}**")
-#                         st.write(f"Autor: {clean_author}")
-#                         st.write(f"Género: {clean_genre}")
-#                         st.write(f"{clean_pages_str}")
+#                         # Crear un contenedor para la tarjeta del libro con altura fija
+#                         with st.container():
+#                             # Aplicar estilos CSS para crear una tarjeta con elementos alineados
+#                             st.markdown("""
+#                             <style>
+#                             .book-container {
+#                                 border: 1px solid #eee;
+#                                 border-radius: 5px;
+#                                 padding: 10px;
+#                                 background-color: #fcfcfc;
+#                                 box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+#                                 height: 350px;
+#                                 display: flex;
+#                                 flex-direction: column;
+#                                 text-align: center;
+#                             }
+#                             .image-container {
+#                                 height: 150px;
+#                                 display: flex;
+#                                 align-items: center;
+#                                 justify-content: center;
+#                                 margin-bottom: 10px;
+#                             }
+#                             .details-container {
+#                                 flex-grow: 1;
+#                                 display: flex;
+#                                 flex-direction: column;
+#                                 text-align: center;
+#                             }
+#                             .book-title {
+#                                 font-weight: bold;
+#                                 font-size: 14px;
+#                                 height: 50px;
+#                                 overflow: hidden;
+#                                 text-overflow: ellipsis;
+#                                 display: -webkit-box;
+#                                 -webkit-line-clamp: 3;
+#                                 -webkit-box-orient: vertical;
+#                             }
+#                             .book-detail {
+#                                 font-size: 12px;
+#                                 margin: 3px 0;
+#                             }
+#                             </style>
+#                             """, unsafe_allow_html=True)
+                            
+#                             # Comenzar la tarjeta del libro
+#                             st.markdown('<div class="book-container">', unsafe_allow_html=True)
+                            
+#                             # Título del libro en la parte superior
+#                             st.markdown(f'<div class="book-title">{clean_title}</div>', unsafe_allow_html=True)
+                            
+#                             # Contenedor para la imagen
+#                             st.markdown('<div class="image-container">', unsafe_allow_html=True)
+                            
+#                             # Manejo de imagen URL
+#                             raw_image_url = book.get('image_url')
+#                             if pd.notna(raw_image_url) and isinstance(raw_image_url, str) and raw_image_url.strip():
+#                                 st.image(
+#                                     raw_image_url.strip(),
+#                                     width=100,  # Ancho fijo para todas las imágenes
+#                                     # Evitamos usar use_column_width y use_container_width
+#                                 )
+#                             else:
+#                                 # Si no hay imagen, mostrar un placeholder
+#                                 st.markdown(
+#                                     """
+#                                     <div style="width:100px;height:150px;background-color:#f0f0f0;
+#                                     display:flex;align-items:center;justify-content:center;
+#                                     text-align:center;border:1px solid #ccc;font-size:10px;padding:5px;">
+#                                     No hay<br>portada
+#                                     </div>
+#                                     """,
+#                                     unsafe_allow_html=True
+#                                 )
+                            
+#                             # Cerrar el contenedor de la imagen
+#                             st.markdown('</div>', unsafe_allow_html=True)
+                            
+#                             # Contenedor para los detalles con altura fija
+#                             st.markdown('<div class="details-container">', unsafe_allow_html=True)
+                            
+#                             # Mostrar detalles del libro de manera consistente
+#                             st.markdown(f'<p class="book-detail"><b>Autor:</b> {clean_author}</p>', unsafe_allow_html=True)
+#                             st.markdown(f'<p class="book-detail"><b>Género:</b> {clean_genre}</p>', unsafe_allow_html=True)
+#                             st.markdown(f'<p class="book-detail"><b>Páginas:</b> {clean_pages_str}</p>', unsafe_allow_html=True)
+                            
+#                             # Cerrar el contenedor de detalles
+#                             st.markdown('</div>', unsafe_allow_html=True)
+                            
+#                             # Cerrar la tarjeta del libro
+#                             st.markdown('</div>', unsafe_allow_html=True)
 #             else:
 #                 st.warning(f"No se encontraron recomendaciones similares para '{selected_book_to_recommend}'.")
 # else:
