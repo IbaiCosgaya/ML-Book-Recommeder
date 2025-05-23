@@ -10,27 +10,56 @@ from scipy.sparse import load_npz
 # --- Configuración para la descarga del archivo grande ---
 COSINE_SIM_MATRIX_URL = "https://github.com/IbaiCosgaya/ML-Book-Recommeder/releases/download/v1.0.0-data/cosine_sim_matrix.npz"
 COSINE_SIM_MATRIX_PATH = 'cosine_sim_matrix.npz'
+# Asegúrate de que 'df_combined_books_final.parquet' y 'tfidf_vectorizer.pkl' también estén en GitHub o en la raíz del repo
+DF_BOOKS_PATH = 'df_combined_books_final.parquet'
+TFIDF_VECTORIZER_PATH = 'tfidf_vectorizer.pkl'
 
 # --- Cargar datos y modelos (¡Solo se cargan una vez!) ---
 @st.cache_resource
 def load_resources():
     try:
-        # Cargar el DataFrame combinado de libros
-        df_combined_books = pd.read_parquet('df_combined_books_final.parquet')
+        # Cargar el DataFrame combinado de libros (asumiendo que está en el repo o es pequeño)
+        # Si df_combined_books_final.parquet es también grande y lo subiste a releases,
+        # necesitarías una lógica de descarga similar aquí
+        df_combined_books = pd.read_parquet(DF_BOOKS_PATH)
         
-        # Cargar el TF-IDF vectorizer
-        with open('tfidf_vectorizer.pkl', 'rb') as f:
+        # Cargar el TF-IDF vectorizer (asumiendo que está en el repo o es pequeño)
+        with open(TFIDF_VECTORIZER_PATH, 'rb') as f:
             tfidf_model_loaded = pickle.load(f)
         
         # --- Lógica para descargar la matriz de similitud si no existe ---
         if not os.path.exists(COSINE_SIM_MATRIX_PATH):
-            st.warning(f"'{COSINE_SIM_MATRIX_PATH}' no encontrado. Intentando descargarlo...")
-            # Aquí deberías añadir tu código de descarga
+            st.warning(f"'{COSINE_SIM_MATRIX_PATH}' no encontrado. Intentando descargarlo desde {COSINE_SIM_MATRIX_URL}...")
+            try:
+                response = requests.get(COSINE_SIM_MATRIX_URL, stream=True)
+                response.raise_for_status() # Lanza un error si la solicitud no fue exitosa
+                
+                total_size = int(response.headers.get('content-length', 0))
+                block_size = 1024 # 1 Kibibyte
+                progress_bar = st.progress(0)
+                downloaded = 0
+                
+                with open(COSINE_SIM_MATRIX_PATH, 'wb') as f:
+                    for data in response.iter_content(block_size):
+                        downloaded += len(data)
+                        f.write(data)
+                        if total_size > 0:
+                            progress_bar.progress(min(int(100 * downloaded / total_size), 100))
+                
+                st.success(f"'{COSINE_SIM_MATRIX_PATH}' descargado exitosamente.")
+                
+            except requests.exceptions.RequestException as req_err:
+                st.error(f"Error al descargar '{COSINE_SIM_MATRIX_PATH}': {req_err}. Revisa la URL o tu conexión.")
+                st.stop() # Detiene la ejecución si la descarga falla
+            except Exception as e:
+                st.error(f"Error al guardar '{COSINE_SIM_MATRIX_PATH}' después de la descarga: {e}")
+                st.stop()
         
         # Cargar la matriz de similitud
+        # Esto solo se ejecutará si el archivo ya existe o si se descargó correctamente
         cosine_sim_matrix_loaded = load_npz(COSINE_SIM_MATRIX_PATH) 
         
-        # Procesamiento de features_df
+        # ... el resto de tu código para features_df ...
         features_df = df_combined_books[['title','authors','average_rating', 'genre', 'pages']].astype(str)
         features_df['title'] = features_df['title'].str.replace(' ', '').str.lower()
         features_df['authors'] = features_df['authors'].str.replace(' ', '').str.lower()
@@ -38,15 +67,15 @@ def load_resources():
         features_df['genre'] = features_df['genre'].str.replace(' ', '').str.lower()
         features_df['pages'] = features_df['pages'].str.replace(' ', '').str.lower()
         features_df['combined_features'] = features_df['title'] + ' ' + \
-                                           features_df['authors'] + ' ' + \
-                                           features_df['average_rating'] + ' ' + \
-                                           features_df['genre'] + ' ' + \
-                                           features_df['pages']
+                                            features_df['authors'] + ' ' + \
+                                            features_df['average_rating'] + ' ' + \
+                                            features_df['genre'] + ' ' + \
+                                            features_df['pages']
 
         return df_combined_books, tfidf_model_loaded, cosine_sim_matrix_loaded, features_df
     
     except FileNotFoundError as e:
-        st.error(f"Error: No se encontraron los archivos de recursos necesarios. Asegúrate de que 'df_combined_books_final.parquet' y 'tfidf_vectorizer.pkl' estén en la misma carpeta. Si falta '{COSINE_SIM_MATRIX_PATH}', el intento de descarga falló.")
+        st.error(f"Error: No se encontraron los archivos de recursos necesarios. Asegúrate de que 'df_combined_books_final.parquet' y 'tfidf_vectorizer.pkl' estén en la misma carpeta o que se descarguen correctamente. Detalle: {e}")
         st.stop()
     except Exception as e:
         st.error(f"Ocurrió un error inesperado al cargar los recursos: {e}")
