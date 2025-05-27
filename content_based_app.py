@@ -282,7 +282,7 @@ if selected_book_to_recommend and selected_book_to_recommend != '':
                             st.markdown(f'<div class="book-title">{clean_title}</div>', unsafe_allow_html=True)
                             
                             # Contenedor para la imagen
-                            st.markdown('<div class="image-container">', unsafe_allow_html=True)
+                            #st.markdown('<div class="image-container">', unsafe_allow_html=True)
                             
                             # Manejo de imagen URL
                             raw_image_url = book.get('image_url')
