@@ -13,9 +13,8 @@ Mediante el uso del **aprendizaje automático**, este sistema no solo propone li
 
 ## 🚀 ¡Prueba la aplicación aquí!
 
-[![Lanzar en Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ml-book-recommeder.streamlit.app/)
-
-O haz clic directamente: [Acceder a la aplicación de recomendación de libros](https://ml-book-recommeder-sekrappw3fajerywep7czvw.streamlit.app/)
+Puedes probar la aplicación en vivo aquí:
+[https://ml-book-recommeder.streamlit.app/](https://ml-book-recommeder.streamlit.app/)
 
 
 ---
