@@ -10,9 +10,11 @@ from scipy.sparse import load_npz
 # --- Configuración para la descarga del archivo grande ---
 COSINE_SIM_MATRIX_URL = "https://github.com/IbaiCosgaya/ML-Book-Recommeder/releases/download/v1.0.0-data/cosine_sim_matrix.npz"
 COSINE_SIM_MATRIX_PATH = 'cosine_sim_matrix.npz'
-# Asegúrate de que 'df_combined_books_final.parquet' y 'tfidf_vectorizer.pkl' también estén en GitHub o en la raíz del repo
 DF_BOOKS_PATH = 'df_combined_books_final.parquet'
 TFIDF_VECTORIZER_PATH = 'tfidf_vectorizer.pkl'
+
+# --- Ruta del logo ---
+LOGO_PATH = 'DeLibreroo.png'
 
 # --- Cargar datos y modelos (¡Solo se cargan una vez!) ---
 @st.cache_resource
@@ -134,7 +136,13 @@ st.markdown(
 )
 
 # --- Interfaz de Usuario en Streamlit ---
-st.title("Book Recommender 📚")
+# Nuevo: Contenedor para el logo y el título principal
+col1, col2 = st.columns([1, 4]) # Ajusta las proporciones si el logo es más grande/pequeño
+with col1:
+    st.image(LOGO_PATH, width=400) # Ajusta el ancho según el tamaño de tu logo
+with col2:
+    st.title("DeLibreroo 📚")
+
 st.markdown("### ¡Encuentra tu próxima lectura favorita!")
 
 # --- Contenedor de filtros ---
