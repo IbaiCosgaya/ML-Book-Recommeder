@@ -276,7 +276,7 @@ if selected_book_to_recommend and selected_book_to_recommend != '':
                             """, unsafe_allow_html=True)
                             
                             # Comenzar la tarjeta del libro
-                            st.markdown('<div class="book-container">', unsafe_allow_html=True)
+                            #st.markdown('<div class="book-container">', unsafe_allow_html=True)
                             
                             # Título del libro en la parte superior
                             st.markdown(f'<div class="book-title">{clean_title}</div>', unsafe_allow_html=True)
