@@ -250,31 +250,30 @@ st.markdown("""
 # --- Funciones de Carga de Datos y Modelos (con caché de Streamlit) ---
 @st.cache_resource
 def load_data_and_models():
-    # if not os.path.exists(data_path) or not os.path.exists(os.path.join(data_path, 'df_combined_books_final.parquet')):
-    #     data_path = './'
-    # if not os.path.exists(models_path) or not os.path.exists(os.path.join(models_path, 'best_svd_algo.pkl')):
-    #     models_path = './'
-    
-    # try:
-        # Carga de DataFrames
-    df_combined_books = 'df_combined_books_final.parquet'
-    df_ratings_modified = 'app_collaborative/df_ratings_modified.parquet'
-    df_users = 'app_collaborative/df_users.parquet'
 
-    # Carga de Modelos
-    best_svd_algo = 'app_collaborative/best_svd_algo.pkl'
-    knn_best = 'app_collaborative/knn_best.pkl'
+    df_combined_books_path = 'df_combined_books_final.parquet'
+    ratings_path = 'app_collaborative/df_ratings_modified.parquet'
+    users_path = 'app_collaborative/df_users.parquet'
+    svd_path = 'app_collaborative/best_svd_algo.pkl'
+    knn_path = 'app_collaborative/knn_best.pkl'
+    user_item_matrix_path = 'app_collaborative/user_item_matrix.parquet'
 
-    # Carga de user_item_matrix (asumimos que es Parquet por tu confirmación)
-    user_item_matrix = 'app_collaborative/user_item_matrix.parquet'
-    
-    return df_combined_books, df_ratings_modified, df_users, best_svd_algo, user_item_matrix, knn_best
-    # except FileNotFoundError as e:
-    #     st.error(f"Error: Uno o más archivos de datos/modelos no se encontraron. Asegúrate de que están en '{data_path}' o '{models_path}'. Detalles: {e}")
-    #     st.stop() # Detiene la ejecución de la app
-    # except Exception as e:
-    #     st.error(f"Error al cargar datos o modelos: {e}")
-    #     st.stop()
+    try:
+        df_combined_books = pd.read_parquet(df_combined_books_path)
+        df_ratings_modified = pd.read_parquet(ratings_path)
+        df_users = pd.read_parquet(users_path)
+        best_svd_algo = joblib.load(svd_path)
+        knn_best = joblib.load(knn_path)
+        user_item_matrix = pd.read_parquet(user_item_matrix_path)
+        
+        return df_combined_books, df_ratings_modified, df_users, best_svd_algo, user_item_matrix, knn_best
+    except FileNotFoundError as e:
+        # Este error es crucial para la depuración en Streamlit Cloud
+        st.error(f"Error: Uno o más archivos de datos/modelos no se encontraron. Asegúrate de que las rutas son correctas y los archivos existen. Detalles: {e}")
+        st.stop() # Detiene la ejecución de la app de forma controlada
+    except Exception as e:
+        st.error(f"Error al cargar datos o modelos: {e}")
+        st.stop()
 
 # Cargar todos los recursos al inicio de la aplicación
 # Estos objetos son las variables globales para tu app Streamlit
