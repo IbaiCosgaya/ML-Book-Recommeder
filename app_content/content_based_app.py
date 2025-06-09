@@ -9,9 +9,9 @@ from scipy.sparse import load_npz
 
 # --- Configuración para la descarga del archivo grande ---
 COSINE_SIM_MATRIX_URL = "https://github.com/IbaiCosgaya/ML-Book-Recommeder/releases/download/v1.0.0-data/cosine_sim_matrix.npz"
-COSINE_SIM_MATRIX_PATH = 'cosine_sim_matrix.npz'
+COSINE_SIM_MATRIX_PATH = 'app_content/cosine_sim_matrix.npz'
 DF_BOOKS_PATH = 'df_combined_books_final.parquet'
-TFIDF_VECTORIZER_PATH = 'tfidf_vectorizer.pkl'
+TFIDF_VECTORIZER_PATH = 'app_content/tfidf_vectorizer.pkl'
 
 # --- Ruta del logo ---
 LOGO_PATH = 'DeLibreroo.png'
