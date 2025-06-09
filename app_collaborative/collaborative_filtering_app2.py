@@ -255,26 +255,26 @@ def load_data_and_models():
     # if not os.path.exists(models_path) or not os.path.exists(os.path.join(models_path, 'best_svd_algo.pkl')):
     #     models_path = './'
     
-    try:
+    # try:
         # Carga de DataFrames
-        df_combined_books = 'df_combined_books_final.parquet'
-        df_ratings_modified = 'app_collaborative/df_ratings_modified.parquet'
-        df_users = 'app_collaborative/df_users.parquet'
+    df_combined_books = 'df_combined_books_final.parquet'
+    df_ratings_modified = 'app_collaborative/df_ratings_modified.parquet'
+    df_users = 'app_collaborative/df_users.parquet'
 
-        # Carga de Modelos
-        best_svd_algo = 'app_collaborative/best_svd_algo.pkl'
-        knn_best = 'app_collaborative/knn_best.pkl'
+    # Carga de Modelos
+    best_svd_algo = 'app_collaborative/best_svd_algo.pkl'
+    knn_best = 'app_collaborative/knn_best.pkl'
 
-        # Carga de user_item_matrix (asumimos que es Parquet por tu confirmación)
-        user_item_matrix = 'app_collaborative/user_item_matrix.parquet'
-        
-        return df_combined_books, df_ratings_modified, df_users, best_svd_algo, user_item_matrix, knn_best
-    except FileNotFoundError as e:
-        st.error(f"Error: Uno o más archivos de datos/modelos no se encontraron. Asegúrate de que están en '{data_path}' o '{models_path}'. Detalles: {e}")
-        st.stop() # Detiene la ejecución de la app
-    except Exception as e:
-        st.error(f"Error al cargar datos o modelos: {e}")
-        st.stop()
+    # Carga de user_item_matrix (asumimos que es Parquet por tu confirmación)
+    user_item_matrix = 'app_collaborative/user_item_matrix.parquet'
+    
+    return df_combined_books, df_ratings_modified, df_users, best_svd_algo, user_item_matrix, knn_best
+    # except FileNotFoundError as e:
+    #     st.error(f"Error: Uno o más archivos de datos/modelos no se encontraron. Asegúrate de que están en '{data_path}' o '{models_path}'. Detalles: {e}")
+    #     st.stop() # Detiene la ejecución de la app
+    # except Exception as e:
+    #     st.error(f"Error al cargar datos o modelos: {e}")
+    #     st.stop()
 
 # Cargar todos los recursos al inicio de la aplicación
 # Estos objetos son las variables globales para tu app Streamlit
