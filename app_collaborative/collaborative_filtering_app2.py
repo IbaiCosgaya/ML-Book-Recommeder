@@ -250,30 +250,23 @@ st.markdown("""
 # --- Funciones de Carga de Datos y Modelos (con caché de Streamlit) ---
 @st.cache_resource
 def load_data_and_models():
-    """Carga todos los DataFrames y modelos necesarios."""
-    # Considera la estructura de tu repositorio. Si los archivos están en una subcarpeta 'data', usa './data/'
-    # Si están en la raíz, usa './'
-    data_path = './data/'
-    models_path = './models/'
-
-    # Ajusta las rutas si no existen las carpetas y los archivos están en la raíz
-    if not os.path.exists(data_path) or not os.path.exists(os.path.join(data_path, 'df_combined_books_final.parquet')):
-        data_path = './'
-    if not os.path.exists(models_path) or not os.path.exists(os.path.join(models_path, 'best_svd_algo.pkl')):
-        models_path = './'
+    # if not os.path.exists(data_path) or not os.path.exists(os.path.join(data_path, 'df_combined_books_final.parquet')):
+    #     data_path = './'
+    # if not os.path.exists(models_path) or not os.path.exists(os.path.join(models_path, 'best_svd_algo.pkl')):
+    #     models_path = './'
     
     try:
         # Carga de DataFrames
-        df_combined_books = pd.read_parquet(os.path.join(data_path, 'df_combined_books_final.parquet'))
-        df_ratings_modified = pd.read_parquet(os.path.join(data_path, 'df_ratings_modified.parquet'))
-        df_users = pd.read_parquet(os.path.join(data_path, 'df_users.parquet'))
+        df_combined_books = 'df_combined_books_final.parquet'
+        df_ratings_modified = 'app_collaborative/df_ratings_modified.parquet'
+        df_users = 'app_collaborative/df_users.parquet'
 
         # Carga de Modelos
-        best_svd_algo = joblib.load(os.path.join(models_path, 'best_svd_algo.pkl'))
-        knn_best = joblib.load(os.path.join(models_path, 'knn_best.pkl'))
+        best_svd_algo = 'app_collaborative/best_svd_algo.pkl'
+        knn_best = 'app_collaborative/knn_best.pkl'
 
         # Carga de user_item_matrix (asumimos que es Parquet por tu confirmación)
-        user_item_matrix = pd.read_parquet(os.path.join(data_path, 'user_item_matrix.parquet'))
+        user_item_matrix = 'app_collaborative/user_item_matrix.parquet'
         
         return df_combined_books, df_ratings_modified, df_users, best_svd_algo, user_item_matrix, knn_best
     except FileNotFoundError as e:
