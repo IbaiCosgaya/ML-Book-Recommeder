@@ -18,7 +18,8 @@ Mediante el uso del **aprendizaje automático**, este sistema no solo propone li
 ## 🚀 ¡Prueba la aplicación aquí!
 
 Puedes probar la aplicación en vivo aquí:
-[https://ml-book-recommeder.streamlit.app/](https://ml-book-recommeder.streamlit.app/)
+[[https://content-recommeder.streamlit.app/](https://content-recommender.streamlit.app/)
+
 
 
 ---
