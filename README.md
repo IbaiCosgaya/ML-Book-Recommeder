@@ -1,8 +1,8 @@
 ---
-title: DeLibreroo - Sistema de Recomendación de Libros
-emoji: 📚
-colorFrom: blue
-colorTo: purple
+title: DeLibreroo
+emoji: 🐠
+colorFrom: red
+colorTo: pink
 sdk: docker
 pinned: false
 license: mit
@@ -40,5 +40,5 @@ Esta aplicación está empaquetada en un contenedor Docker. Hugging Face Spaces 
 [El enlace a tu Hugging Face Space aparecerá aquí una vez desplegado]
 
 ---
-**Autor:** [Tu Nombre o tu Nombre de Usuario en GitHub]
-**Repositorio de GitHub:** [Enlace a tu repositorio de GitHub]
+**Autor:** [IbaiCosgaya]
+**Repositorio de GitHub:** [[Enlace a tu repositorio de GitHub](https://github.com/IbaiCosgaya)]
