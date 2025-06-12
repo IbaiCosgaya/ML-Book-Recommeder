@@ -633,7 +633,7 @@ with col_rating:
                 clean_title = re.sub(r'\s*\(.*?\)\s*', '', str(row['title'])).strip()
                 
                 # Construir la etiqueta que se mostrará en el selectbox
-                book_label = f"{clean_title} por {row.get('authors', row.get('author', 'Autor desconocido'))}"
+                book_label = f"{clean_title} de {row.get('authors', row.get('author', 'Autor desconocido'))}"
                 book_options_for_genre.append((book_label, row['book_id']))
             
             # Añadir la opción por defecto al principio, como una tupla (label, value)
